@@ -1,4 +1,4 @@
-[Hux Blog](https://huangxuan.me)
+[Nickwei Blog](https://nickwei.ggff.net)
 ================================
 
 > I never expected this to become popular.
