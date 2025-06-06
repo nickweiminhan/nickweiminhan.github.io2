@@ -69,4 +69,38 @@
     <!-- Google AdSense -->
     <script data-ad-client="ca-pub-6487568398225121" async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+    <!-- 博客全文搜索功能：搜索框、Fuse.js、搜索脚本 -->
+    <input type="text" id="searchBox" placeholder="输入关键词搜索..." style="padding:6px;width:220px;">
+    <ul id="searchResults"></ul>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <script>
+      async function initSearch() {
+        const res = await fetch('{{ "/search.json" | relative_url }}');
+        const posts = await res.json();
+
+        const fuse = new Fuse(posts, {
+          keys: ['title', 'content'],
+          threshold: 0.4
+        });
+
+        const searchBox = document.getElementById('searchBox');
+        const resultsList = document.getElementById('searchResults');
+
+        searchBox.addEventListener('input', function () {
+          const query = searchBox.value.trim();
+          resultsList.innerHTML = '';
+          if (!query) return;
+
+          const results = fuse.search(query);
+          results.slice(0, 6).forEach(({ item }) => {
+            const li = document.createElement('li');
+            li.innerHTML = `<a href="${item.url}">${item.title}</a>`;
+            resultsList.appendChild(li);
+          });
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', initSearch);
+    </script>
 </head>
